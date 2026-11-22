@@ -1,0 +1,1046 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 23rd Birthday, Sayang 🤍</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans & Caveat (Handwriting for Polaroid) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        handwriting: ['"Caveat"', 'cursive'],
+                    },
+                    colors: {
+                        cream: '#FDF8F5',
+                        warmPaper: '#FFFDF9',
+                        blush: '#F4DFDF',
+                        terracotta: '#C87D6B',
+                        dustyRose: '#D48C94',
+                        deepRose: '#9E5A63',
+                        warmGold: '#C59B6D',
+                        charcoal: '#3A3234',
+                        mutedText: '#6E6265'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 0%, #FFF7F4 0%, #F9ECE8 55%, #F3E0DC 100%);
+            color: #3A3234;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Subtle Paper Texture Overlay */
+        .paper-texture {
+            background-color: #FFFDF9;
+            background-image: radial-gradient(rgba(197, 155, 109, 0.08) 1px, transparent 0);
+            background-size: 20px 20px;
+            box-shadow: 0 20px 50px -15px rgba(158, 90, 99, 0.16), 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Floating Hearts & Sparkles Background */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            15% { opacity: 0.65; }
+            85% { opacity: 0.65; }
+            100% {
+                transform: translateY(-10vh) scale(1.15) rotate(25deg);
+                opacity: 0;
+            }
+        }
+
+        .floating-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear infinite;
+        }
+
+        /* Candle Flame Animation */
+        @keyframes flicker {
+            0%, 100% {
+                transform: scale(1) rotate(-2deg);
+                opacity: 0.95;
+                box-shadow: 0 0 18px 4px rgba(255, 190, 70, 0.7), 0 0 35px 10px rgba(255, 120, 40, 0.35);
+            }
+            25% {
+                transform: scale(1.06, 0.96) rotate(2deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.96, 1.05) rotate(-1deg);
+                opacity: 0.9;
+                box-shadow: 0 0 22px 6px rgba(255, 200, 80, 0.8), 0 0 40px 12px rgba(255, 130, 50, 0.45);
+            }
+            75% {
+                transform: scale(1.04, 0.98) rotate(3deg);
+                opacity: 0.98;
+            }
+        }
+
+        .candle-flame {
+            width: 16px;
+            height: 26px;
+            background: radial-gradient(ellipse at bottom, #FFFFFF 10%, #FFE066 45%, #FF8C42 85%, transparent 100%);
+            border-radius: 50% 50% 35% 35% / 65% 65% 35% 35%;
+            animation: flicker 1.4s infinite ease-in-out;
+            transform-origin: bottom center;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .candle-flame.blown-out {
+            opacity: 0;
+            transform: scale(0.1) translateY(-10px);
+            animation: none;
+        }
+
+        /* Smoke Effect after blowing candle */
+        @keyframes smokeRise {
+            0% { opacity: 0; transform: translateY(0) scale(0.5); }
+            30% { opacity: 0.75; }
+            100% { opacity: 0; transform: translateY(-45px) scale(2) translateX(8px); }
+        }
+
+        .candle-smoke {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(160, 155, 160, 0.65) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .candle-smoke.active {
+            animation: smokeRise 2.2s ease-out forwards;
+        }
+
+        /* Envelope Styling & Animation */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        .envelope-flap {
+            transform-origin: top center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
+        }
+
+        .envelope-open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 5;
+        }
+
+        /* Polaroid Card Styling */
+        .polaroid-card {
+            background: #FFFDF9;
+            padding: 12px 12px 18px 12px;
+            border-radius: 14px;
+            box-shadow: 0 12px 28px -8px rgba(58, 50, 52, 0.14), 0 2px 6px rgba(197, 155, 109, 0.15);
+            border: 1px solid rgba(197, 155, 109, 0.22);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+        }
+
+        .polaroid-card:hover {
+            transform: scale(1.04) rotate(0deg) !important;
+            box-shadow: 0 20px 38px -10px rgba(158, 90, 99, 0.25);
+            z-index: 20;
+        }
+
+        /* Reveal Section Animation */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-reveal {
+            animation: fadeSlideUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Soft Pulse Button */
+        @keyframes softPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .btn-pulse {
+            animation: softPulse 2.8s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #DFB5BA;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased selection:bg-blush selection:text-deepRose relative flex flex-col justify-between">
+
+    <!-- Floating Ambient Particles Container -->
+    <div id="particles-container" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <!-- Top Header / Audio Control -->
+    <header class="fixed top-0 left-0 right-0 z-40 px-4 py-3 sm:px-8 sm:py-4 flex justify-between items-center pointer-events-none">
+        <div class="bg-white/75 backdrop-blur-md border border-warmGold/25 px-3.5 py-1.5 rounded-full shadow-sm pointer-events-auto">
+            <span class="font-serif italic text-deepRose text-sm sm:text-base font-semibold tracking-wide">22 . 11 . 2026</span>
+        </div>
+
+        <button id="music-toggle" onclick="toggleMusic()" aria-label="Toggle Musik"
+            class="pointer-events-auto bg-white/85 hover:bg-white backdrop-blur-md border border-warmGold/30 text-deepRose px-3.5 py-2 rounded-full shadow-sm flex items-center gap-2 text-xs sm:text-sm font-medium transition-all active:scale-95 cursor-pointer">
+            <span id="music-icon" class="text-base">🎵</span>
+            <span id="music-label">Putar Musik</span>
+        </button>
+    </header>
+
+    <!-- Main Content Flow -->
+    <main class="relative z-10 flex-grow flex flex-col items-center px-4 pt-20 pb-12 sm:px-6 max-w-3xl mx-auto w-full space-y-14">
+
+        <!-- ========================================================= -->
+        <!-- SECTION 1: HERO & INTERACTIVE BIRTHDAY CAKE ("23" CANDLES) -->
+        <!-- ========================================================= -->
+        <section id="hero-cake-section" class="flex flex-col items-center text-center w-full pt-2">
+            <div class="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/75 border border-dustyRose/35 text-deepRose text-xs sm:text-sm tracking-widest uppercase shadow-sm">
+                <span>✨</span>
+                <span>Untuk Arga — 22 November 2026</span>
+                <span>✨</span>
+            </div>
+
+            <h1 class="font-serif text-4xl sm:text-6xl font-bold text-charcoal leading-tight mb-3">
+                Happy 23rd Birthday, <span class="text-deepRose italic">Sayang</span> 🤍
+            </h1>
+
+            <p id="cake-instruction" class="text-mutedText text-sm sm:text-base max-w-md leading-relaxed mb-6">
+                Make a wish dulu ya sayangg... tutup mata sebentar, berdoa yang terbaik buat umur 23 kamu, terus klik lilin atau tombol di bawah buat tiup lilinnya! 🕯️
+            </p>
+
+            <!-- Interactive Cake Graphic -->
+            <div onclick="blowCandles()" class="relative cursor-pointer group select-none my-2 p-4 rounded-3xl transition-transform duration-300 hover:scale-[1.02] active:scale-95" title="Klik untuk meniup lilin">
+                <!-- Glow behind candles -->
+                <div id="candle-glow" class="absolute top-2 left-1/2 -translate-x-1/2 w-36 h-24 bg-amber-300/35 rounded-full blur-2xl transition-opacity duration-700"></div>
+
+                <!-- Number "23" Candles -->
+                <div class="relative flex justify-center items-end gap-5 mb-1 z-10">
+                    <!-- Candle 2 -->
+                    <div class="flex flex-col items-center">
+                        <div class="relative h-8 flex items-end justify-center">
+                            <div id="smoke-1" class="candle-smoke absolute bottom-1"></div>
+                            <div id="flame-1" class="candle-flame"></div>
+                        </div>
+                        <div class="w-1.5 h-2 bg-charcoal/80 rounded-t-full"></div>
+                        <div class="font-serif font-bold text-4xl sm:text-5xl drop-shadow-sm leading-none select-none bg-gradient-to-b from-amber-300 via-warmGold to-amber-700 bg-clip-text text-transparent">
+                            2
+                        </div>
+                    </div>
+
+                    <!-- Candle 3 -->
+                    <div class="flex flex-col items-center">
+                        <div class="relative h-8 flex items-end justify-center">
+                            <div id="smoke-2" class="candle-smoke absolute bottom-1"></div>
+                            <div id="flame-2" class="candle-flame" style="animation-delay: 0.3s;"></div>
+                        </div>
+                        <div class="w-1.5 h-2 bg-charcoal/80 rounded-t-full"></div>
+                        <div class="font-serif font-bold text-4xl sm:text-5xl drop-shadow-sm leading-none select-none bg-gradient-to-b from-amber-300 via-warmGold to-amber-700 bg-clip-text text-transparent">
+                            3
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aesthetic Minimalist Two-Tier Cake SVG -->
+                <svg class="w-64 sm:w-72 h-auto mx-auto drop-shadow-md" viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cake Plate -->
+                    <ellipse cx="140" cy="162" rx="125" ry="12" fill="#EAD7D1"/>
+                    <ellipse cx="140" cy="159" rx="115" ry="9" fill="#FFFDF9"/>
+
+                    <!-- Bottom Tier -->
+                    <rect x="45" y="95" width="190" height="62" rx="14" fill="#F4D5D8"/>
+                    <path d="M45 109C45 101.268 51.268 95 59 95H221C228.732 95 235 101.268 235 109V115C225 123 215 113 205 119C195 125 185 113 175 119C165 125 155 113 145 119C135 125 125 113 115 119C105 125 95 113 85 119C75 125 65 113 55 119C49 122 45 118 45 115V109Z" fill="#FFFDF9"/>
+
+                    <!-- Top Tier -->
+                    <rect x="75" y="45" width="130" height="52" rx="12" fill="#E6B8BE"/>
+                    <path d="M75 57C75 50.3726 80.3726 45 87 45H193C199.627 45 205 50.3726 205 57V63C196 70 188 61 180 66C172 71 164 61 156 66C148 71 140 61 132 66C124 71 116 61 108 66C100 71 92 61 84 66C79 69 75 66 75 63V57Z" fill="#FFFDF9"/>
+
+                    <!-- Decorative Gold Pearls & Hearts -->
+                    <circle cx="95" cy="83" r="3" fill="#C59B6D"/>
+                    <circle cx="118" cy="83" r="3" fill="#C59B6D"/>
+                    <circle cx="140" cy="83" r="3.5" fill="#9E5A63"/>
+                    <circle cx="162" cy="83" r="3" fill="#C59B6D"/>
+                    <circle cx="185" cy="83" r="3" fill="#C59B6D"/>
+
+                    <circle cx="70" cy="138" r="3.5" fill="#C59B6D"/>
+                    <circle cx="105" cy="138" r="3.5" fill="#9E5A63"/>
+                    <circle cx="140" cy="138" r="4" fill="#C59B6D"/>
+                    <circle cx="175" cy="138" r="3.5" fill="#9E5A63"/>
+                    <circle cx="210" cy="138" r="3.5" fill="#C59B6D"/>
+                </svg>
+            </div>
+
+            <!-- Blow Candle Button -->
+            <div class="mt-4">
+                <button id="blow-btn" onclick="blowCandles()"
+                    class="btn-pulse bg-gradient-to-r from-dustyRose to-deepRose hover:from-deepRose hover:to-dustyRose text-white font-medium px-8 py-4 rounded-full shadow-lg shadow-dustyRose/30 inline-flex items-center gap-2.5 text-base sm:text-lg transition-all active:scale-95 cursor-pointer">
+                    <span>Tiup Lilin & Make a Wish</span>
+                    <span>✨</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- POST-CANDLE REVEAL CONTAINER (SWEET OPENER + LETTER + GALLERY + QUIZ) -->
+        <!-- ========================================================= -->
+        <div id="post-candle-content" class="hidden w-full flex-col items-center space-y-16">
+
+            <!-- SECTION 2A: SWEET OPENER MESSAGE RIGHT AFTER BLOWING CANDLES -->
+            <section id="sweet-opener" class="w-full max-w-xl mx-auto text-center bg-white/80 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-warmGold/30 shadow-md animate-reveal">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blush/60 text-2xl mb-3">
+                    🕯️🤍
+                </div>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-deepRose mb-2">
+                    Yeay, Selamat 23 Tahun Sayangg!
+                </h2>
+                <p class="text-charcoal/90 text-sm sm:text-base leading-relaxed">
+                    Semoga semua doa baik yang barusan kamu bisikin di dalam hati dikabulkan satu per satu sama Allah ya. Makasih udah jadi laki-laki paling penyayang dan paling sabar buat aku. Sekarang, coba buka amplop surat di bawah ini ya... 💌
+                </p>
+            </section>
+
+            <!-- SECTION 2B: INTERACTIVE ENVELOPE & LOVE LETTER -->
+            <section id="letter-section" class="w-full flex flex-col items-center">
+                <!-- Closed / Opening Envelope -->
+                <div id="envelope-stage" class="flex flex-col items-center text-center my-2 w-full">
+                    <span class="text-xs uppercase tracking-widest text-warmGold font-semibold mb-1.5">Sebuah Pesan Dari Hati</span>
+                    <h3 class="font-serif text-3xl sm:text-4xl font-bold text-charcoal mb-6">
+                        Surat Kecil Untukmu 🤍
+                    </h3>
+
+                    <div id="envelope-box" onclick="openEnvelope()"
+                        class="envelope-wrapper relative w-72 sm:w-80 h-48 sm:h-52 cursor-pointer group select-none transition-transform duration-300 hover:scale-105">
+                        <!-- Envelope Back -->
+                        <div class="absolute inset-0 bg-[#E8C5C9] rounded-2xl shadow-xl border border-warmGold/30"></div>
+
+                        <!-- Mini Letter Preview Inside -->
+                        <div id="mini-card" class="absolute inset-x-4 top-3 bottom-3 bg-warmPaper rounded-xl shadow-sm p-4 flex flex-col items-center justify-center transition-transform duration-700 z-10 border border-warmGold/20">
+                            <p class="font-serif italic text-deepRose text-lg">Happy birthday, sayangg 🤍</p>
+                            <p class="text-[11px] text-mutedText mt-1">Ketuk amplop untuk membuka...</p>
+                        </div>
+
+                        <!-- Envelope Front Flaps -->
+                        <div class="absolute inset-0 z-15 pointer-events-none overflow-hidden rounded-2xl">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-[#F2D7DA] to-[#F8E5E7]" style="clip-path: polygon(0 0, 52% 52%, 0 100%);"></div>
+                            <div class="absolute inset-0 bg-gradient-to-tl from-[#EED0D4] to-[#F8E5E7]" style="clip-path: polygon(100% 0, 48% 52%, 100% 100%);"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#E5BFC4] to-[#F5DCDE]" style="clip-path: polygon(0 100%, 50% 48%, 100% 100%);"></div>
+                        </div>
+
+                        <!-- Envelope Top Flap -->
+                        <div class="envelope-flap absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#DFB2B8] to-[#EBC8CC] rounded-t-2xl shadow-sm"
+                            style="clip-path: polygon(0 0, 100% 0, 50% 95%);">
+                        </div>
+
+                        <!-- Wax Seal Heart -->
+                        <div id="wax-seal" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-gradient-to-br from-deepRose to-[#7D3F47] shadow-md border-2 border-warmGold/60 flex items-center justify-center text-white text-lg transition-all duration-500 group-hover:scale-110">
+                            🤍
+                        </div>
+                    </div>
+
+                    <button onclick="openEnvelope()"
+                        class="mt-6 bg-white hover:bg-cream border border-dustyRose/50 text-deepRose font-medium px-6 py-2.5 rounded-full shadow-sm text-sm transition-all active:scale-95 cursor-pointer">
+                        Buka Surat Untukmu 💌
+                    </button>
+                </div>
+
+                <!-- Opened Full Letter Paper -->
+                <div id="letter-stage" class="hidden w-full max-w-2xl flex-col items-center opacity-0 transition-opacity duration-1000">
+                    <article class="paper-texture w-full rounded-3xl p-6 sm:p-10 md:p-12 border border-warmGold/25 relative overflow-hidden">
+                        <div class="flex justify-between items-center border-b border-warmGold/20 pb-4 mb-6">
+                            <span class="font-serif italic text-warmGold text-base sm:text-lg">22 November 2026</span>
+                            <span class="text-deepRose text-sm font-medium">Untuk Arga 🤍</span>
+                        </div>
+
+                        <!-- Exact User Letter -->
+                        <div class="font-sans text-charcoal text-[15px] sm:text-base leading-[1.85] space-y-5 tracking-[0.01em]">
+                            <p class="font-serif text-2xl sm:text-3xl font-semibold text-deepRose mb-2">
+                                Happy birthday, sayangg 🤍
+                            </p>
+
+                            <p>
+                                Aku sebenarnya bingung mau nulis apa, karena rasanya banyak banget yang pengen aku bilang ke kamu, tapi susah buat dijadiin kata-kata.
+                            </p>
+
+                            <p>
+                                Yang paling pertama, aku cuma mau bilang makasih. Makasih karena sampai hari ini kamu masih ada di sini, masih mau nemenin aku, masih mau dengerin aku, dan masih mau menghadapi segala sifat aku yang kadang bikin kamu kesel.
+                            </p>
+
+                            <p>
+                                Mungkin selama ini aku nggak selalu nunjukin seberapa berartinya kamu buat aku. Kadang aku malah lebih sering ngambek, marah, atau nuntut ini itu. Tapi di balik itu semua, sebenarnya aku takut kehilangan kamu. Aku terlalu sayang sama kamu sampai kadang aku nggak tahu cara nunjukinnya dengan baik.
+                            </p>
+
+                            <p>
+                                Aku nggak tahu kita bakal sejauh apa nantinya. Aku juga nggak bisa janji kalau hubungan kita bakal selalu mudah. Pasti akan ada hari di mana kita capek, beda pendapat, atau saling bikin kecewa. Tapi aku berharap, setiap kali ada masalah, kita nggak langsung memilih pergi.
+                            </p>
+
+                            <p>
+                                Aku pengen kita tetap belajar satu sama lain. Tetap saling ngerti. Tetap saling milih, bahkan ketika keadaan lagi nggak seindah sekarang.
+                            </p>
+
+                            <p>
+                                Di ulang tahun kamu ini, aku nggak cuma berharap kamu panjang umur. Aku berharap kamu punya banyak alasan buat bahagia. Semoga semua perjuangan kamu selama ini nggak sia-sia. Semoga suatu hari nanti kamu bisa lihat diri kamu sendiri dan bilang, "ternyata aku berhasil sampai sejauh ini."
+                            </p>
+
+                            <p>
+                                Dan kalau nanti kamu berhasil mencapai semua yang kamu impikan, aku berharap aku masih jadi orang yang bisa kamu cari untuk cerita, orang yang bisa ikut bangga sama kamu, dan orang yang bisa kamu peluk setelah hari yang panjang.
+                            </p>
+
+                            <p>
+                                Maaf kalau hari ini aku belum bisa kasih kamu sesuatu yang mewah. Tapi percayalah, kalau aku punya lebih, aku pasti pengen kasih kamu banyak hal.
+                            </p>
+
+                            <p>
+                                Untuk sekarang, aku cuma bisa kasih apa yang aku punya: doa, perhatian, dan rasa sayang aku buat kamu.
+                            </p>
+
+                            <p class="font-serif text-xl sm:text-2xl font-semibold text-deepRose pt-2">
+                                Selamat ulang tahun, sayangg. 🤍
+                            </p>
+
+                            <p>
+                                Semoga umur baru ini membawa banyak hal baik buat kamu. Jangan terlalu keras sama diri sendiri yaa. Kamu udah sejauh ini, dan aku bangga sama kamu.
+                            </p>
+
+                            <p>
+                                Terima kasih sudah menjadi kamu.<br>
+                                Dan terima kasih karena sudah mengizinkan aku menjadi bagian kecil dari hidup kamu.
+                            </p>
+
+                            <p class="font-medium text-deepRose pt-2">
+                                Aku sayang kamu. Hari ini, besok, dan semoga masih untuk banyak hari setelahnya. 🤍
+                            </p>
+                        </div>
+
+                        <div class="mt-8 pt-5 border-t border-warmGold/20 flex justify-between items-center text-xs sm:text-sm text-mutedText italic font-serif">
+                            <span>Selalu sayang kamu,</span>
+                            <span>23 Tahun • Arga ✨</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ========================================================= -->
+            <!-- SECTION 3: POLAROID PHOTO GALLERY ("Momen Kita 📸")      -->
+            <!-- ========================================================= -->
+            <section id="gallery-section" class="w-full flex flex-col items-center">
+                <div class="text-center mb-8">
+                    <span class="text-xs uppercase tracking-widest text-warmGold font-semibold">Kenangan Manis</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-charcoal mt-1">
+                        Momen Kita 📸
+                    </h2>
+                    <p class="text-mutedText text-sm sm:text-base mt-1.5 max-w-md mx-auto">
+                        Beberapa potongan cerita kita yang selalu bikin aku senyum tiap lihatnya (ketuk fotonya buat perbesar ya!)
+                    </p>
+                </div>
+
+                <!-- Responsive Polaroid Grid (2 cols on mobile/tablet, 3 cols on desktop, centered last row) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 w-full items-center justify-items-center">
+                    <!-- Photo 1: 134284.jpg -->
+                    <div onclick="openLightbox('134284.jpg', 'Si paling ganteng & penyayang 🤍')"
+                        class="polaroid-card w-full max-w-[260px] cursor-pointer -rotate-2">
+                        <div class="w-full aspect-[4/5] rounded-lg overflow-hidden bg-blush/30">
+                            <img src="134284.jpg" alt="Arga" class="w-full h-full object-cover object-top"
+                                onerror="this.src='https://placehold.co/400x500/F4DFDF/9E5A63?text=Arga+%F0%9F%A4%8D'">
+                        </div>
+                        <p class="font-handwriting text-xl sm:text-2xl text-charcoal text-center mt-3 leading-snug">
+                            Si paling ganteng & penyayang 🤍
+                        </p>
+                    </div>
+
+                    <!-- Photo 2: 131178.jpg -->
+                    <div onclick="openLightbox('131178.jpg', 'Ngedate bareng kamu ✨')"
+                        class="polaroid-card w-full max-w-[260px] cursor-pointer rotate-2">
+                        <div class="w-full aspect-[4/5] rounded-lg overflow-hidden bg-blush/30">
+                            <img src="131178.jpg" alt="Ngedate bareng kamu" class="w-full h-full object-cover object-center"
+                                onerror="this.src='https://placehold.co/400x500/F4DFDF/9E5A63?text=Momen+Kita+1'">
+                        </div>
+                        <p class="font-handwriting text-xl sm:text-2xl text-charcoal text-center mt-3 leading-snug">
+                            Ngedate bareng kamu ✨
+                        </p>
+                    </div>
+
+                    <!-- Photo 3: 122319.jpg -->
+                    <div onclick="openLightbox('122319.jpg', 'Senyum favorit aku 😊')"
+                        class="polaroid-card w-full max-w-[260px] cursor-pointer -rotate-1">
+                        <div class="w-full aspect-[4/5] rounded-lg overflow-hidden bg-blush/30">
+                            <img src="122319.jpg" alt="Senyum favorit aku" class="w-full h-full object-cover object-center"
+                                onerror="this.src='https://placehold.co/400x500/F4DFDF/9E5A63?text=Momen+Kita+2'">
+                        </div>
+                        <p class="font-handwriting text-xl sm:text-2xl text-charcoal text-center mt-3 leading-snug">
+                            Senyum favorit aku 😊
+                        </p>
+                    </div>
+
+                    <!-- Photo 4: 105569.jpg -->
+                    <div onclick="openLightbox('105569.jpg', 'Photobox gemes mode on 🦖')"
+                        class="polaroid-card w-full max-w-[260px] cursor-pointer rotate-2 lg:translate-x-1/2">
+                        <div class="w-full aspect-[4/5] rounded-lg overflow-hidden bg-blush/30">
+                            <img src="105569.jpg" alt="Photobox gemes" class="w-full h-full object-cover object-top"
+                                onerror="this.src='https://placehold.co/400x500/F4DFDF/9E5A63?text=Photobox+1'">
+                        </div>
+                        <p class="font-handwriting text-xl sm:text-2xl text-charcoal text-center mt-3 leading-snug">
+                            Photobox gemes mode on 🦖
+                        </p>
+                    </div>
+
+                    <!-- Photo 5: 104925.jpg -->
+                    <div onclick="openLightbox('104925.jpg', 'Selalu nyaman di dekatmu 🤍')"
+                        class="polaroid-card w-full max-w-[260px] cursor-pointer -rotate-2 sm:col-span-2 lg:col-span-1 lg:translate-x-1/2">
+                        <div class="w-full aspect-[4/5] rounded-lg overflow-hidden bg-blush/30">
+                            <img src="104925.jpg" alt="Selalu nyaman di dekatmu" class="w-full h-full object-cover object-top"
+                                onerror="this.src='https://placehold.co/400x500/F4DFDF/9E5A63?text=Photobox+2'">
+                        </div>
+                        <p class="font-handwriting text-xl sm:text-2xl text-charcoal text-center mt-3 leading-snug">
+                            Selalu nyaman di dekatmu 🤍
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================= -->
+            <!-- SECTION 4: FUN 3-QUESTION MINI QUIZ ("Kuis Kecil Buat Sayang 🎯") -->
+            <!-- ========================================================= -->
+            <section id="quiz-section" class="w-full max-w-xl mx-auto">
+                <div class="bg-white/85 backdrop-blur-md rounded-3xl p-6 sm:p-9 border border-warmGold/30 shadow-xl">
+                    <div class="text-center mb-6">
+                        <span class="text-xs uppercase tracking-widest text-terracotta font-semibold">Ujian Kelulusan 23 Tahun</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-charcoal mt-1">
+                            Kuis Kecil Buat Sayang 🎯
+                        </h2>
+                        <p class="text-mutedText text-xs sm:text-sm mt-1">
+                            Cuma 3 pertanyaan santai kok, jawab jujur ya sayangg! 😜
+                        </p>
+                    </div>
+
+                    <!-- Active Question Container -->
+                    <div id="quiz-container" class="space-y-5">
+                        <div class="flex items-center justify-between text-xs font-medium text-deepRose bg-blush/40 px-4 py-2 rounded-full">
+                            <span id="quiz-progress-text">Pertanyaan 1 dari 3</span>
+                            <span>🤍</span>
+                        </div>
+
+                        <h3 id="quiz-question" class="font-serif text-xl sm:text-2xl font-semibold text-charcoal leading-snug">
+                            <!-- Question injected by JS -->
+                        </h3>
+
+                        <div id="quiz-options" class="space-y-3">
+                            <!-- Option buttons injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Celebratory 100/100 Result Card -->
+                    <div id="quiz-result" class="hidden flex-col items-center text-center space-y-5 py-2 animate-reveal">
+                        <div class="inline-flex flex-col items-center justify-center px-7 py-4 rounded-3xl bg-gradient-to-br from-blush/70 to-amber-100/70 border-2 border-warmGold/50 shadow-inner">
+                            <span class="text-xs uppercase tracking-widest text-deepRose font-bold">Hasil Ujian Kamu</span>
+                            <div class="font-serif text-4xl sm:text-5xl font-bold text-deepRose mt-1">
+                                SKOR: 100 / 100 💯
+                            </div>
+                        </div>
+
+                        <p class="text-charcoal text-sm sm:text-base leading-relaxed bg-cream/90 p-5 rounded-2xl border border-dustyRose/30">
+                            "Selamat! Kamu resmi lulus ujian jadi pacar paling penyayang & paling sabar sedunia! Hadiahnya: peluk sepuasnya + nggak boleh ngambek-ngambek lagi ya (kecuali aku yang ngambek duluan 😜🤍)"
+                        </p>
+
+                        <button onclick="claimVirtualHug()"
+                            class="btn-pulse bg-gradient-to-r from-dustyRose to-deepRose hover:from-deepRose hover:to-dustyRose text-white font-medium px-8 py-4 rounded-full shadow-lg shadow-dustyRose/30 inline-flex items-center gap-2.5 text-base transition-all active:scale-95 cursor-pointer">
+                            <span>Klaim Peluk Virtual</span>
+                            <span>🤍</span>
+                        </button>
+
+                        <!-- Hug Feedback Toast -->
+                        <div id="hug-feedback" class="hidden w-full p-4 rounded-2xl bg-blush/60 border border-dustyRose/40 text-deepRose font-medium text-sm sm:text-base">
+                            Peluk hangat super erat terkirim buat Arga! Sekali lagi, Happy 23rd Birthday sayangg 🤍✨
+                        </div>
+
+                        <!-- Replay Quiz / Full Experience -->
+                        <div class="pt-3 flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-mutedText">
+                            <button onclick="restartQuiz()" class="hover:text-deepRose underline underline-offset-4 cursor-pointer">
+                                ↺ Ulangi Kuis
+                            </button>
+                            <span>•</span>
+                            <button onclick="resetAll()" class="hover:text-deepRose underline underline-offset-4 cursor-pointer">
+                                🎂 Tiup Lilin Lagi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Lightbox Modal for Polaroid Zoom -->
+    <div id="photo-lightbox" onclick="closeLightbox()"
+        class="fixed inset-0 z-50 hidden bg-charcoal/80 backdrop-blur-sm items-center justify-center p-4 transition-opacity">
+        <div onclick="event.stopPropagation()" class="bg-warmPaper p-4 sm:p-5 rounded-2xl max-w-sm w-full shadow-2xl border border-warmGold/30 text-center relative animate-reveal">
+            <button onclick="closeLightbox()" aria-label="Tutup foto"
+                class="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-deepRose text-white shadow-md flex items-center justify-center text-sm font-bold cursor-pointer hover:scale-105">
+                ✕
+            </button>
+            <div class="w-full aspect-[4/5] rounded-xl overflow-hidden bg-blush/30">
+                <img id="lightbox-img" src="" alt="Foto Kenangan" class="w-full h-full object-cover object-top">
+            </div>
+            <p id="lightbox-caption" class="font-handwriting text-2xl sm:text-3xl text-charcoal mt-4"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center py-6 px-4 text-xs text-mutedText/85">
+        Dibuat penuh cinta untuk Arga • 22 November 2026 🤍
+    </footer>
+
+    <script>
+        // ==========================================
+        // 1. AMBIENT FLOATING HEARTS & SPARKLES
+        // ==========================================
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            const symbols = ['🤍', '✨', '🌸', '🤍', '·'];
+            const count = 22;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-particle select-none';
+                el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+                const left = Math.random() * 100;
+                const duration = 12 + Math.random() * 14;
+                const delay = Math.random() * 12;
+                const size = 10 + Math.random() * 12;
+
+                el.style.left = `${left}vw`;
+                el.style.animationDuration = `${duration}s`;
+                el.style.animationDelay = `-${delay}s`;
+                el.style.fontSize = `${size}px`;
+                el.style.color = '#C59B6D';
+
+                container.appendChild(el);
+            }
+        }
+
+        // ==========================================
+        // 2. WEB AUDIO API SOFT PIANO MELODY
+        // ==========================================
+        let audioCtx = null;
+        let isPlaying = false;
+        let melodyTimer = null;
+        let noteIndex = 0;
+
+        const melodyNotes = [
+            { freq: 261.63, dur: 0.45 }, { freq: 261.63, dur: 0.35 }, { freq: 293.66, dur: 0.85 },
+            { freq: 261.63, dur: 0.85 }, { freq: 349.23, dur: 0.85 }, { freq: 329.63, dur: 1.50 },
+            { freq: 261.63, dur: 0.45 }, { freq: 261.63, dur: 0.35 }, { freq: 293.66, dur: 0.85 },
+            { freq: 261.63, dur: 0.85 }, { freq: 392.00, dur: 0.85 }, { freq: 349.23, dur: 1.50 },
+            { freq: 261.63, dur: 0.45 }, { freq: 261.63, dur: 0.35 }, { freq: 523.25, dur: 0.85 },
+            { freq: 440.00, dur: 0.85 }, { freq: 349.23, dur: 0.85 }, { freq: 329.63, dur: 0.85 },
+            { freq: 293.66, dur: 1.50 }, { freq: 466.16, dur: 0.45 }, { freq: 466.16, dur: 0.35 },
+            { freq: 440.00, dur: 0.85 }, { freq: 349.23, dur: 0.85 }, { freq: 392.00, dur: 0.85 },
+            { freq: 349.23, dur: 2.00 }
+        ];
+
+        function playSoftPianoNote(freq, duration) {
+            if (!audioCtx || !isPlaying) return;
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const overtone = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            const overtoneGain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+
+            overtone.type = 'triangle';
+            overtone.frequency.setValueAtTime(freq * 2, now);
+
+            gainNode.gain.setValueAtTime(0.0001, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.13, now + 0.06);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + duration + 1.1);
+
+            overtoneGain.gain.setValueAtTime(0.0001, now);
+            overtoneGain.gain.exponentialRampToValueAtTime(0.025, now + 0.04);
+            overtoneGain.gain.exponentialRampToValueAtTime(0.0001, now + duration * 0.8);
+
+            osc.connect(gainNode);
+            overtone.connect(overtoneGain);
+            overtoneGain.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start(now);
+            overtone.start(now);
+            osc.stop(now + duration + 1.2);
+            overtone.stop(now + duration + 1.2);
+        }
+
+        function scheduleNextNote() {
+            if (!isPlaying) return;
+            const current = melodyNotes[noteIndex];
+            playSoftPianoNote(current.freq, current.dur);
+            noteIndex = (noteIndex + 1) % melodyNotes.length;
+            melodyTimer = setTimeout(scheduleNextNote, current.dur * 1000);
+        }
+
+        function startMusic() {
+            try {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                if (!isPlaying) {
+                    isPlaying = true;
+                    updateMusicButtonUI();
+                    scheduleNextNote();
+                }
+            } catch (e) {
+                console.warn('Web Audio API tidak tersedia:', e);
+            }
+        }
+
+        function stopMusic() {
+            isPlaying = false;
+            if (melodyTimer) {
+                clearTimeout(melodyTimer);
+                melodyTimer = null;
+            }
+            updateMusicButtonUI();
+        }
+
+        function toggleMusic() {
+            if (isPlaying) stopMusic();
+            else startMusic();
+        }
+
+        function updateMusicButtonUI() {
+            const icon = document.getElementById('music-icon');
+            const label = document.getElementById('music-label');
+            if (isPlaying) {
+                icon.textContent = '🎶';
+                label.textContent = 'Musik Nyala';
+            } else {
+                icon.textContent = '🔇';
+                label.textContent = 'Putar Musik';
+            }
+        }
+
+        // ==========================================
+        // 3. CANDLE BLOW & POST-CANDLE FLOW
+        // ==========================================
+        let candlesBlown = false;
+        let envelopeOpened = false;
+
+        function blowCandles() {
+            if (candlesBlown) return;
+            candlesBlown = true;
+
+            // Start soft piano music on user interaction
+            if (!isPlaying) {
+                startMusic();
+            }
+
+            // Extinguish flames & glow
+            document.getElementById('flame-1').classList.add('blown-out');
+            document.getElementById('flame-2').classList.add('blown-out');
+            document.getElementById('candle-glow').style.opacity = '0';
+
+            // Smoke effect
+            document.getElementById('smoke-1').classList.add('active');
+            document.getElementById('smoke-2').classList.add('active');
+
+            // Update Cake Instruction & Hide Blow Button
+            document.getElementById('cake-instruction').textContent =
+                'Lilinnya udah ditiup! Scroll ke bawah buat baca kejutan dari aku ya sayangg 🤍';
+            document.getElementById('blow-btn').classList.add('hidden');
+
+            // Celebratory Confetti
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 85,
+                    spread: 75,
+                    origin: { y: 0.55 },
+                    colors: ['#D48C94', '#C59B6D', '#F4DFDF', '#9E5A63', '#FFFDF9']
+                });
+            }
+
+            // Reveal Sweet Opener, Envelope, Photo Gallery & Quiz smoothly
+            const postContent = document.getElementById('post-candle-content');
+            postContent.classList.remove('hidden');
+            postContent.classList.add('flex');
+
+            setTimeout(() => {
+                document.getElementById('sweet-opener').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 650);
+        }
+
+        // ==========================================
+        // 4. INTERACTIVE ENVELOPE
+        // ==========================================
+        function openEnvelope() {
+            if (envelopeOpened) return;
+            envelopeOpened = true;
+
+            const envelopeBox = document.getElementById('envelope-box');
+            const waxSeal = document.getElementById('wax-seal');
+            const miniCard = document.getElementById('mini-card');
+
+            envelopeBox.classList.add('envelope-open');
+            waxSeal.style.opacity = '0';
+            waxSeal.style.transform = 'translate(-50%, -50%) scale(0.5)';
+
+            setTimeout(() => {
+                miniCard.style.transform = 'translateY(-35px)';
+            }, 350);
+
+            setTimeout(() => {
+                const envStage = document.getElementById('envelope-stage');
+                const letterStage = document.getElementById('letter-stage');
+
+                envStage.style.display = 'none';
+                letterStage.classList.remove('hidden');
+                letterStage.classList.add('flex');
+
+                setTimeout(() => {
+                    letterStage.classList.remove('opacity-0');
+                    letterStage.classList.add('opacity-100');
+                }, 50);
+
+                letterStage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 950);
+        }
+
+        // ==========================================
+        // 5. POLAROID PHOTO LIGHTBOX
+        // ==========================================
+        function openLightbox(src, caption) {
+            const modal = document.getElementById('photo-lightbox');
+            const img = document.getElementById('lightbox-img');
+            const cap = document.getElementById('lightbox-caption');
+
+            img.src = src;
+            cap.textContent = caption;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('photo-lightbox');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // ==========================================
+        // 6. FUN 3-QUESTION MINI QUIZ (GUARANTEED 100/100)
+        // ==========================================
+        const quizData = [
+            {
+                question: "Siapa yang paling sering ngambek duluan tapi sebenarnya cuma pengen diperhatiin?",
+                options: [
+                    "Aku (pacar kamu yang gemesin 😜)",
+                    "Kamu yang selalu sabar ngalah",
+                    "Dua-duanya sama aja wkwk"
+                ]
+            },
+            {
+                question: "Kalau lagi capek atau badmood setelah seharian beraktivitas, obat paling ampuh buat kamu apa?",
+                options: [
+                    "Dipuk-puk & dipeluk kamu 🤍",
+                    "Dengerin cerita random aku",
+                    "Jajan enak bareng kamu"
+                ]
+            },
+            {
+                question: "Di umur 23 ini, siapa pacar paling penyayang, sabar, dan ganteng sedunia?",
+                options: [
+                    "Arga dong, masa orang lain!",
+                    "Yang lagi senyum-senyum baca web ini sekarang",
+                    "Semua jawaban di atas benar 100% 💯"
+                ]
+            }
+        ];
+
+        let currentQuizIndex = 0;
+
+        function renderQuizQuestion() {
+            const qObj = quizData[currentQuizIndex];
+            document.getElementById('quiz-progress-text').textContent = `Pertanyaan ${currentQuizIndex + 1} dari ${quizData.length}`;
+            document.getElementById('quiz-question').textContent = qObj.question;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            qObj.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className =
+                    'w-full text-left px-5 py-3.5 rounded-2xl bg-cream hover:bg-blush/50 border border-dustyRose/35 text-charcoal font-medium text-sm sm:text-base transition-all duration-200 flex items-center justify-between gap-3 active:scale-[0.99] cursor-pointer group';
+                btn.innerHTML = `
+                    <span>${optText}</span>
+                    <span class="text-deepRose opacity-60 group-hover:opacity-100 transition-opacity">→</span>
+                `;
+                btn.onclick = () => handleQuizAnswer(btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(selectedBtn) {
+            // Highlight chosen option briefly for tactile feedback
+            selectedBtn.classList.remove('bg-cream');
+            selectedBtn.classList.add('bg-blush', 'border-deepRose', 'text-deepRose');
+
+            setTimeout(() => {
+                currentQuizIndex++;
+                if (currentQuizIndex < quizData.length) {
+                    renderQuizQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }, 320);
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resultBox = document.getElementById('quiz-result');
+            resultBox.classList.remove('hidden');
+            resultBox.classList.add('flex');
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 80,
+                    origin: { y: 0.7 },
+                    colors: ['#D48C94', '#C59B6D', '#F4DFDF', '#9E5A63', '#FFFFFF']
+                });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('flex');
+            document.getElementById('hug-feedback').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            renderQuizQuestion();
+        }
+
+        // Virtual Hug Button Action
+        function claimVirtualHug() {
+            const feedback = document.getElementById('hug-feedback');
+            feedback.classList.remove('hidden');
+
+            // Floating White Hearts Burst
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.textContent = i % 3 === 0 ? '✨' : '🤍';
+                heart.className = 'fixed z-50 pointer-events-none select-none';
+                heart.style.left = `${Math.random() * 92 + 4}vw`;
+                heart.style.bottom = '-30px';
+                heart.style.fontSize = `${18 + Math.random() * 18}px`;
+                heart.style.transition = `transform ${2.2 + Math.random() * 1.5}s ease-out, opacity 2.5s ease-in`;
+                heart.style.opacity = '1';
+
+                document.body.appendChild(heart);
+
+                requestAnimationFrame(() => {
+                    const driftX = (Math.random() - 0.5) * 120;
+                    const riseY = -(window.innerHeight * (0.6 + Math.random() * 0.4));
+                    heart.style.transform = `translate(${driftX}px, ${riseY}px) scale(1.25)`;
+                    heart.style.opacity = '0';
+                });
+
+                setTimeout(() => heart.remove(), 3800);
+            }
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 65,
+                    spread: 85,
+                    origin: { y: 0.75 },
+                    colors: ['#FFFFFF', '#F4DFDF', '#D48C94', '#C59B6D']
+                });
+            }
+        }
+
+        // Reset Full Experience
+        function resetAll() {
+            candlesBlown = false;
+            envelopeOpened = false;
+
+            document.getElementById('flame-1').classList.remove('blown-out');
+            document.getElementById('flame-2').classList.remove('blown-out');
+            document.getElementById('candle-glow').style.opacity = '1';
+            document.getElementById('smoke-1').classList.remove('active');
+            document.getElementById('smoke-2').classList.remove('active');
+            document.getElementById('cake-instruction').textContent =
+                'Make a wish dulu ya sayangg... tutup mata sebentar, berdoa yang terbaik buat umur 23 kamu, terus klik lilin atau tombol di bawah buat tiup lilinnya! 🕯️';
+            document.getElementById('blow-btn').classList.remove('hidden');
+
+            // Reset Envelope
+            const envelopeBox = document.getElementById('envelope-box');
+            const waxSeal = document.getElementById('wax-seal');
+            const miniCard = document.getElementById('mini-card');
+            envelopeBox.classList.remove('envelope-open');
+            waxSeal.style.opacity = '1';
+            waxSeal.style.transform = 'translate(-50%, -50%) scale(1)';
+            miniCard.style.transform = 'translateY(0)';
+            document.getElementById('envelope-stage').style.display = 'flex';
+            const letterStage = document.getElementById('letter-stage');
+            letterStage.classList.add('hidden', 'opacity-0');
+            letterStage.classList.remove('flex', 'opacity-100');
+
+            // Hide Post-Candle Sections & Reset Quiz
+            const postContent = document.getElementById('post-candle-content');
+            postContent.classList.add('hidden');
+            postContent.classList.remove('flex');
+            restartQuiz();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            renderQuizQuestion();
+        });
+    </script>
+</body>
+</html>
+```
